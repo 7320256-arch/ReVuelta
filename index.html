@@ -1507,6 +1507,128 @@ function toast(txt) {
 $("#year").textContent = new Date().getFullYear();
 pintarCarrito();
 </script>
+<!-- Botón para instalar la app (PWA) -->
+<style>
+  .instalar-btn{
+    position:fixed;left:16px;bottom:16px;z-index:78;display:none;align-items:center;gap:.5rem;
+    background:var(--marron);color:var(--crema);border:0;border-radius:999px;
+    padding:.72rem 1.15rem;font-family:inherit;font-weight:bold;font-size:.88rem;cursor:pointer;
+    box-shadow:0 10px 24px rgba(74,50,38,.35);transition:background .2s, transform .15s;
+  }
+  .instalar-btn:hover{background:var(--terracota-osc)}
+  .instalar-btn:active{transform:scale(.97)}
+  .instalar-btn.mostrar{display:inline-flex}
+  @media (max-width:420px){ .instalar-btn{padding:.65rem .95rem;font-size:.82rem} }
+  .inst-modal{position:fixed;inset:0;z-index:130;display:none;place-items:center;padding:1rem;background:rgba(74,50,38,.5)}
+  .inst-modal.show{display:grid}
+  .inst-card{
+    background:var(--papel);border-radius:20px;max-width:440px;width:100%;padding:1.5rem 1.4rem 1.3rem;
+    box-shadow:0 24px 60px rgba(74,50,38,.35);position:relative;
+  }
+  .inst-card h3{margin:0 0 .2rem;font-size:1.22rem}
+  .inst-card .sub{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--terracota-osc);font-weight:bold}
+  .inst-card ol{margin:.9rem 0 0;padding-left:1.2rem;display:grid;gap:.55rem;font-size:.92rem;color:var(--marron-suave)}
+  .inst-card ol b{color:var(--marron)}
+  .inst-x{position:absolute;top:.55rem;right:.6rem;width:34px;height:34px;border-radius:50%;
+    background:var(--papel);border:1px solid var(--linea);cursor:pointer;font-size:1.05rem;color:var(--marron)}
+  .inst-nota{margin:.9rem 0 0;font-size:.78rem;color:#8E7A65;border-left:3px solid var(--arena);padding-left:.7rem}
+</style>
+<button class="instalar-btn" id="btnInstalar" type="button">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4 20h16"/>
+  </svg>
+  Instalar app
+</button>
+<div class="inst-modal" id="instModal" role="dialog" aria-modal="true" aria-labelledby="instTitulo">
+  <div class="inst-card">
+    <button class="inst-x" id="instCerrar" type="button" aria-label="Cerrar">✕</button>
+    <span class="sub">ReVuelta en tu teléfono</span>
+    <h3 id="instTitulo">Instalar la app</h3>
+    <ol id="instPasos"></ol>
+    <p class="inst-nota" id="instNota"></p>
+  </div>
+</div>
+<script>
+(function () {
+  var btn   = document.getElementById("btnInstalar");
+  var modal = document.getElementById("instModal");
+  var pasos = document.getElementById("instPasos");
+  var nota  = document.getElementById("instNota");
+  var promptDif = null;
+
+  function yaInstalada() {
+    try {
+      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+    } catch (e) {}
+    return window.navigator.standalone === true;
+  }
+
+  function mostrarBoton() { if (!yaInstalada()) btn.classList.add("mostrar"); }
+  function ocultarBoton() { btn.classList.remove("mostrar"); }
+
+  // Chrome/Edge: evento oficial de instalación
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    promptDif = e;
+    mostrarBoton();
+  });
+  window.addEventListener("appinstalled", function () {
+    promptDif = null;
+    ocultarBoton();
+    cerrar();
+  });
+
+  function esIOS() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  }
+  function esAndroid() { return /android/i.test(navigator.userAgent); }
+
+  function instrucciones() {
+    if (esIOS()) {
+      pasos.innerHTML =
+        "<li>Abre esta página en <b>Safari</b> (en iPhone no funciona desde Chrome).</li>" +
+        "<li>Toca el botón <b>Compartir</b> (el cuadro con la flecha hacia arriba).</li>" +
+        "<li>Elige <b>Añadir a pantalla de inicio</b> y confirma con <b>Añadir</b>.</li>";
+      nota.textContent = "Se abrirá a pantalla completa, con su ícono, y funcionará sin internet.";
+    } else if (esAndroid()) {
+      pasos.innerHTML =
+        "<li>Abre el menú <b>⋮</b> de Chrome (arriba a la derecha).</li>" +
+        "<li>Toca <b>Instalar aplicación</b> o <b>Agregar a la pantalla principal</b>.</li>" +
+        "<li>Confirma con <b>Instalar</b>.</li>";
+      nota.textContent = "Si no aparece esa opción, abre el enlace en Chrome (no en el navegador de Facebook o WhatsApp).";
+    } else {
+      pasos.innerHTML =
+        "<li>En la barra de direcciones busca el ícono de <b>instalar</b> (una pantalla con una flecha).</li>" +
+        "<li>O abre el menú <b>⋮</b> de Chrome → <b>Instalar ReVuelta</b>.</li>" +
+        "<li>Confirma con <b>Instalar</b>.</li>";
+      nota.textContent = "También puedes copiar el enlace y abrirlo en el teléfono para instalarla ahí.";
+    }
+  }
+
+  function abrir() { instrucciones(); modal.classList.add("show"); document.body.style.overflow = "hidden"; }
+  function cerrar() { modal.classList.remove("show"); document.body.style.overflow = ""; }
+
+  btn.addEventListener("click", function () {
+    if (promptDif) {
+      promptDif.prompt();
+      promptDif.userChoice.then(function (r) {
+        if (r && r.outcome === "accepted") ocultarBoton();
+        promptDif = null;
+      }).catch(function () { promptDif = null; });
+      return;
+    }
+    abrir();   // sin prompt disponible → instrucciones paso a paso
+  });
+
+  document.getElementById("instCerrar").addEventListener("click", cerrar);
+  modal.addEventListener("click", function (e) { if (e.target === modal) cerrar(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrar(); });
+
+  // aparece igual, aunque Chrome no ofrezca el instalador
+  if (!yaInstalada()) setTimeout(mostrarBoton, 900);
+})();
+</script>
 <script>
   // PWA: registra el service worker (solo funciona en https o localhost)
   if ("serviceWorker" in navigator) {

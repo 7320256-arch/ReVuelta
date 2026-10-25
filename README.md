@@ -227,3 +227,69 @@ Espera 1–2 minutos a que GitHub Pages publique.
 Mantén presionado el ícono → **Desinstalar**, y vuelve a instalarla desde el enlace.
 Si el aviso “Revisa las actualizaciones…” aparece otra vez, toca **Ignorar**: no rompe nada,
 el sitio funciona igual en el navegador.
+
+---
+
+## 9. POR QUÉ SIGUE PASANDO (y cómo se acaba de una vez)
+
+Las dos apps viven en **el mismo dominio**: `stevealejo124.github.io`.
+GitHub Pages no da un dominio propio por repositorio: solo cambia la carpeta
+(`/ReVenta-Cosas-buenas-otra-vuelta/` y `/El-torito-negocio-/`), pero el **dominio es el
+mismo**. Chrome trata cada dominio como "un sitio", así que con dos web apps instaladas en el
+mismo dominio se confunde y te ofrece abrir El Torito con la app de ReVuelta.
+
+Eso no lo arregla el manifest: ni el `id`, ni el `scope`, ni reinstalar. El `id: "./"` y el
+`sw v2` sí corrigieron el nombre y el ícono, pero **la mezcla entre las dos apps es del
+dominio compartido**.
+
+### Solución definitiva: darle a ReVuelta su propio dominio (gratis, 3 minutos)
+
+**Netlify Drop** — no hace falta tarjeta ni instalar nada:
+
+1. Entra a **https://app.netlify.com/drop**
+2. Arrastra **la carpeta** donde tengas estos archivos (`index.html`, `manifest.webmanifest`,
+   `sw.js` y los 4 íconos).
+3. Netlify te da una dirección tipo `https://revuelta-abc123.netlify.app` (puedes cambiarla
+   en *Site settings → Change site name* a `https://revuelta-jiquilisco.netlify.app`).
+4. Abre ese enlace en el teléfono → **Instalar aplicación**.
+
+Resultado: ReVuelta queda en `netlify.app` y El Torito en `github.io`. **Dominios distintos =
+apps totalmente independientes**, sin avisos, sin cruces, y el enlace de ReVuelta es más corto
+para mandar por WhatsApp.
+
+> ¿Prefieres que El Torito se mueva? También sirve. Solo tienen que quedar en **dominios
+> diferentes**. Alternativas igual de gratis: Cloudflare Pages, Vercel, Firebase Hosting.
+
+### Mientras tanto (si te sale el cartel)
+
+- El botón del cartel es solo **una sugerencia de Chrome**, no un error: la página de El Torito
+  sigue funcionando en el navegador. Toca la **✕** y sigue.
+- No marques *“Recordar esta opción”* con la app equivocada, o Chrome lo hará siempre.
+- La app de El Torito y la de ReVuelta **no se dañan** entre sí: son archivos separados en
+  repos separados.
+
+---
+
+## 10. Botón "Instalar app" (nuevo)
+
+Como Chrome no siempre muestra su cartel de instalación, el sitio ahora trae su **propio
+botón**: aparece **abajo a la izquierda** (el flotante verde de WhatsApp sigue abajo a la
+derecha, no chocan).
+
+**Cómo funciona**
+
+1. Si el navegador **sí** ofrece instalar (`beforeinstallprompt`), el botón lanza el instalador
+   nativo de Chrome con un toque.
+2. Si el navegador **no** lo ofrece, el botón abre una ventana con los **pasos según el
+   dispositivo**:
+   - **iPhone/Safari** → Compartir → *Añadir a pantalla de inicio*
+   - **Android/Chrome** → menú ⋮ → *Instalar aplicación*
+   - **Computadora** → ícono de instalar en la barra de direcciones
+3. Cuando la app **ya está instalada** (se abre en modo `standalone`), el botón **no aparece**.
+4. Al instalarla, desaparece solo y no vuelve a molestar.
+
+**Qué subir:** solo `index.html` (el botón va dentro del HTML). Los íconos, `sw.js` y el
+manifest no cambian.
+
+> Este botón solo existe en la versión PWA (`build.py --pwa`). El `index.html` "normal" del
+> proyecto no lo incluye, por si algún día publicas el sitio como web sencilla.
