@@ -48,9 +48,9 @@
       ]
     },
     {
-      "name": "Cómo comprar",
-      "short_name": "Cómo comprar",
-      "url": "./index.html#como-comprar",
+      "name": "Vender mi artículo",
+      "short_name": "Vender",
+      "url": "./vender.html",
       "icons": [
         {
           "src": "icon-192.png",

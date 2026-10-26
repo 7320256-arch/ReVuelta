@@ -293,3 +293,103 @@ manifest no cambian.
 
 > Este botón solo existe en la versión PWA (`build.py --pwa`). El `index.html` "normal" del
 > proyecto no lo incluye, por si algún día publicas el sitio como web sencilla.
+
+---
+
+## 11. Programa de vendedores (nuevo)
+
+El sitio ahora permite que **otras personas vendan** en ReVuelta. Reglas aplicadas:
+
+- **Comisión: 20%** del precio de venta
+- **Mínimo: $1.50** por artículo vendido (aunque el 20% dé menos)
+- Sin cuota de inscripción: solo se cobra cuando el artículo se vende
+- Si no se vende, el vendedor no paga nada
+
+### Qué se agregó
+
+1. **Entrada "Vender" en el menú** y en el footer.
+2. Sección **`#vender`** con: tarjeta de la comisión, **calculadora** (precio → comisión → lo que recibe el vendedor) y los 3 pasos del proceso.
+3. **Formulario** que arma el mensaje de WhatsApp con: artículo, categoría, estado, precio, comisión calculada, lo que recibe, detalles, nombre y teléfono.
+4. **Avisos automáticos** en la calculadora:
+   - cuando se aplica el mínimo de $1.50
+   - cuando el precio es tan bajo que el vendedor no recibiría nada (bloquea el envío y pide subir el precio, recomendando desde $3)
+5. **Dos preguntas nuevas en el FAQ** explicando la comisión con ejemplos ($10 → $2 de comisión, recibe $8; $5 → se aplica el mínimo, recibe $3.50).
+6. La tarjeta de "Nosotros" ahora dice la comisión y lleva a la sección, en lugar del enlace genérico anterior.
+
+**Para cambiar la comisión**, en `index.html` busca:
+
+```js
+const VENTA = { pct: 0.20, minimo: 1.50 };
+```
+
+Y actualiza también los textos de la tarjeta y del FAQ para que digan el número nuevo.
+
+**Qué subir al repo:** solo `index.html` (todo el programa vive dentro).
+
+---
+
+## 12. Vender ahora es una PÁGINA APARTE (`vender.html`)
+
+Ya **no** está como sección con scroll en el catálogo. Es un archivo independiente:
+
+| Archivo | Qué es |
+|---|---|
+| `index.html` | solo catálogo, compra y pedidos |
+| **`vender.html`** | requisitos, costos, material, proceso y solicitud |
+
+**Cómo se llega:** desde el menú (**Vender**), desde la tarjeta de “Nosotros” (“Ver requisitos
+para vender”) y desde el footer. El catálogo no muestra la calculadora ni el formulario.
+
+### Estructura de la página de vendedores
+
+1. **Requisitos** (6 tarjetas, la última en rojo = lo prohibido)
+   - Comunicarse primero con ReVuelta
+   - Aceptar precio y comisión
+   - Aceptar el costo de publicación
+   - Información 100% real (no decir “nuevo” si es usado)
+   - Material de publicación completo
+   - Nada obsceno, ilegal, falsificado, robado ni peligroso
+2. **Costos** con tabla y calculadora (precio + cantidad → publicación, comisión y lo que le queda)
+3. **Material** que debe enviar el vendedor: fotos, flyer, información y precio
+4. **Proceso** en 4 pasos
+5. **Solicitud**: 4 casillas de aceptación obligatorias + datos. El botón está **desactivado
+   hasta que acepta las 4**. El mensaje de WhatsApp va con la aceptación escrita, los datos y el
+   resumen de costos calculado por el sitio.
+
+### Precios de publicación que definí (editables)
+
+| Concepto | Precio |
+|---|---|
+| Publicar 1 artículo (30 días) | **$0.25** |
+| Pack 3 artículos | **$0.60** |
+| Pack 5 artículos | **$0.90** |
+| Renovar 30 días | **$0.15** |
+| Comisión al vender | **20%**, mínimo **$1.50** |
+
+Razonamiento: el catálogo mueve artículos de $3 a $15, así que un cobro de publicación alto
+espantaría a los vendedores. $0.25 paga el tiempo de armar la ficha y mantenerla 30 días.
+La comisión sigue igual (20% / mín. $1.50) porque es lo que ya se acordó por WhatsApp.
+
+**Para cambiar cualquier precio**, en `vender.html` arriba del `<script>`:
+
+```js
+const CONFIG = {
+  whatsapp: "50379470124",
+  comisionPct: 0.20,
+  comisionMin: 1.50,
+  publicacion: { 1: 0.25, 3: 0.60, 5: 0.90 },
+  renovacion: 0.15
+};
+```
+
+Después de cambiarlos, actualiza también los textos de la tabla y de los requisitos para que
+digan el número nuevo.
+
+### Qué subir al repo
+
+Ahora son **2 archivos nuevos/modificados**: `index.html` (ya no tiene la sección) y
+**`vender.html`** (nuevo). Además cambió `sw.js` (versión v3 y cachea `vender.html`) y
+`manifest.webmanifest` (atajo “Vender mi artículo”).
+
+> El service worker v3 guarda `vender.html` en caché: la página de vendedores también abre
+> sin internet.

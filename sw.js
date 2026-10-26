@@ -6,10 +6,11 @@
    - Íconos y fotos: cache-first (casi nunca cambian).
 */
 
-const VERSION = "revuelta-v2";
+const VERSION = "revuelta-v3";
 const SHELL = [
   "./",
   "./index.html",
+  "./vender.html",
   "./manifest.webmanifest",
   "./icon-192.png",
   "./icon-512.png",

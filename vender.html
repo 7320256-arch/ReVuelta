@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vender en ReVuelta · Requisitos y costos</title>
+<meta name="description" content="Requisitos, costos y pasos para vender tus artículos en ReVuelta. Publicación desde $0.25 y comisión del 20% solo cuando se vende. Entregas en el Parque Central de Jiquilisco.">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{
+    --crema:#FAF3EA; --crema-2:#F3E7D8; --papel:#FFFBF6;
+    --marron:#4A3226; --marron-suave:#6B4E3D; --arena:#E4CDB4;
+    --terracota:#B0663C; --terracota-osc:#8E4F2C; --oliva:#7C8055;
+    --linea:#E3D2BE; --rojo:#A83A26; --rojo-bg:#F7D9CE;
+    --sombra:0 10px 30px rgba(74,50,38,.10); --sombra-sm:0 4px 14px rgba(74,50,38,.08);
+    --radio:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--crema);color:var(--marron);font-family:"Trebuchet MS","Segoe UI",Verdana,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{margin:0 0 .4em;line-height:1.15;letter-spacing:.2px}
+  h1{font-size:clamp(1.9rem,5.5vw,3.2rem)}
+  h2{font-size:clamp(1.45rem,3.4vw,2.1rem)}
+  h3{font-size:1.1rem}
+  p{margin:0 0 1em}
+  a{color:inherit}
+  .wrap{width:min(1080px,92vw);margin-inline:auto}
+  .script{font-family:"Brush Script MT","Segoe Script","Bradley Hand",cursive}
+  .eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;font-weight:bold;color:var(--terracota-osc)}
+  .eyebrow::before{content:"";width:24px;height:2px;background:var(--terracota);border-radius:2px}
+
+  /* topbar + header */
+  .topbar{background:var(--marron);color:var(--crema-2);font-size:.8rem;text-align:center;padding:.5rem 1rem}
+  .topbar strong{color:#fff}
+  header.site{position:sticky;top:0;z-index:60;background:rgba(250,243,234,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--linea)}
+  .nav{display:flex;align-items:center;gap:.9rem;padding:.7rem 0;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;margin-right:auto}
+  .logo-mark{width:44px;height:44px;border-radius:14px;background:var(--marron);display:grid;place-items:center;flex:0 0 auto;box-shadow:var(--sombra-sm)}
+  .logo-txt{display:flex;flex-direction:column;line-height:1}
+  .logo-txt b{font-size:1.3rem;letter-spacing:.5px}
+  .logo-txt small{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--marron-suave);margin-top:3px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.8rem 1.3rem;border-radius:999px;border:2px solid transparent;font-family:inherit;font-size:.92rem;font-weight:bold;cursor:pointer;text-decoration:none;transition:transform .15s, background .2s, box-shadow .2s}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--terracota);color:#fff;box-shadow:0 8px 20px rgba(176,102,60,.28)}
+  .btn-primary:hover{background:var(--terracota-osc)}
+  .btn-ghost{background:transparent;border-color:var(--marron);color:var(--marron)}
+  .btn-ghost:hover{background:var(--marron);color:var(--crema)}
+  .btn-wa{background:#25A45B;color:#fff;box-shadow:0 8px 20px rgba(37,164,91,.25)}
+  .btn-wa:hover{background:#1E8A4C}
+  .btn-sm{padding:.55rem 1rem;font-size:.85rem}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+
+  /* hero */
+  .hero{padding:clamp(1.8rem,4vw,3rem) 0 1.4rem}
+  .hero h1 em{font-style:normal;color:var(--terracota);position:relative}
+  .hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.02em;height:.26em;background:var(--arena);z-index:-1;border-radius:40% 60% 50% 50%}
+  .hero p.lead{color:var(--marron-suave);max-width:52ch;font-size:1.03rem}
+  .hero-badges{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
+  .hero-badges span{display:inline-flex;align-items:center;gap:.4rem;background:var(--papel);border:1px solid var(--linea);padding:.35rem .75rem;border-radius:999px;font-size:.82rem;color:var(--marron-suave)}
+
+  section{padding:clamp(1.9rem,4vw,3rem) 0}
+  .alt{background:var(--crema-2)}
+  .sec-head{max-width:660px;margin-bottom:1.5rem}
+  .sec-head p{color:var(--marron-suave);margin-bottom:0}
+
+  /* requisitos */
+  .req-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+  .req{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);padding:1.15rem 1.2rem;box-shadow:var(--sombra-sm);display:flex;gap:.85rem;align-items:flex-start}
+  .req .ico{flex:0 0 auto;width:38px;height:38px;border-radius:11px;background:var(--arena);display:grid;place-items:center;font-weight:bold;color:var(--marron)}
+  .req h3{margin:0 0 .2rem;font-size:1rem}
+  .req p{margin:0;font-size:.88rem;color:var(--marron-suave)}
+  .prohibido{background:#FBE4DC;border-color:#E9BCA9}
+  .prohibido .ico{background:#F3C4B3}
+  .prohibido h3{color:#8A3A21}
+
+  /* costos */
+  .costos-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(1.1rem,3vw,2rem);align-items:start}
+  @media (max-width:880px){.costos-grid{grid-template-columns:1fr}}
+  table.tabla{width:100%;border-collapse:collapse;background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);overflow:hidden;box-shadow:var(--sombra-sm);font-size:.9rem}
+  table.tabla th,table.tabla td{padding:.72rem .9rem;text-align:left;border-bottom:1px solid var(--linea)}
+  table.tabla th{background:var(--crema-2);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--marron-suave)}
+  table.tabla td:last-child,table.tabla th:last-child{text-align:right;white-space:nowrap;font-weight:bold}
+  table.tabla tr:last-child td{border-bottom:0}
+  table.tabla .destacado td{background:#F7EFE4}
+  .nota{font-size:.8rem;color:#8E7A65;margin:.7rem 0 0;border-left:3px solid var(--arena);padding-left:.7rem}
+
+  .calc{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);padding:1.25rem;box-shadow:var(--sombra-sm)}
+  .calc h4{margin:0 0 .1rem;font-size:1rem}
+  .calc .hint{font-size:.8rem;color:#8E7A65;margin:0 0 .8rem}
+  .campo{margin-bottom:.65rem}
+  .campo label{display:block;font-size:.74rem;font-weight:bold;letter-spacing:.08em;text-transform:uppercase;color:var(--marron-suave);margin-bottom:.25rem}
+  .campo input,.campo select,.campo textarea{width:100%;padding:.62rem .72rem;border:1.5px solid var(--linea);border-radius:10px;font-family:inherit;font-size:.92rem;background:var(--papel);color:var(--marron)}
+  .campo input:focus,.campo select:focus,.campo textarea:focus{outline:2px solid var(--arena);border-color:var(--terracota)}
+  .calc-fila{display:flex;gap:.5rem;align-items:center}
+  .calc-fila .moneda{font-weight:bold;background:var(--crema-2);border:1.5px solid var(--linea);border-radius:10px;padding:.6rem .7rem}
+  .calc-res{display:grid;gap:.45rem;margin-top:.9rem;border-top:1px dashed var(--linea);padding-top:.85rem;font-size:.9rem;color:var(--marron-suave)}
+  .calc-res div{display:flex;justify-content:space-between;gap:.7rem}
+  .calc-res b{color:var(--marron)}
+  .calc-res .recibe{border-top:1px solid var(--linea);padding-top:.5rem;font-size:1rem;color:var(--marron);font-weight:bold}
+  .calc-res .recibe b{color:var(--oliva);font-size:1.25rem}
+  .aviso-rojo{display:none;margin-top:.7rem;font-size:.8rem;line-height:1.4;background:var(--rojo-bg);color:#8A3A21;border:1px solid #E7B7A6;border-radius:10px;padding:.55rem .75rem}
+  .aviso-rojo.show{display:block}
+
+  /* material */
+  .mat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+  .mat{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);padding:1.15rem;box-shadow:var(--sombra-sm)}
+  .mat h3{display:flex;align-items:center;gap:.5rem;margin:0 0 .35rem;font-size:1rem}
+  .mat h3 span{width:30px;height:30px;border-radius:9px;background:var(--arena);display:grid;place-items:center;font-size:.95rem}
+  .mat p{margin:0;font-size:.86rem;color:var(--marron-suave)}
+  .mat b{color:var(--marron)}
+
+  /* pasos */
+  .pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+  .paso{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);padding:1.2rem;box-shadow:var(--sombra-sm)}
+  .paso .num{width:38px;height:38px;border-radius:11px;background:var(--arena);color:var(--marron);display:grid;place-items:center;font-weight:bold;font-size:1.05rem;margin-bottom:.7rem}
+  .paso h3{margin-bottom:.25rem;font-size:1rem}
+  .paso p{margin:0;font-size:.87rem;color:var(--marron-suave)}
+
+  /* formulario */
+  .form-card{background:var(--papel);border:1px solid var(--linea);border-radius:var(--radio);padding:clamp(1.1rem,3vw,1.7rem);box-shadow:var(--sombra)}
+  .dos{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+  @media (max-width:560px){.dos{grid-template-columns:1fr}}
+  .checks{display:grid;gap:.6rem;margin:.4rem 0 1rem}
+  .check{display:flex;gap:.7rem;align-items:flex-start;background:var(--crema);border:1.5px solid var(--linea);border-radius:12px;padding:.7rem .8rem;cursor:pointer;font-size:.88rem;color:var(--marron-suave);transition:border-color .15s, background .15s}
+  .check:hover{border-color:var(--arena)}
+  .check input{margin-top:.22rem;width:19px;height:19px;accent-color:#25A45B;flex:0 0 auto;cursor:pointer}
+  .check b{color:var(--marron)}
+  .check.ok{border-color:#A9CB9C;background:#F1F7EE}
+  .fila-ejemplo{display:flex;justify-content:space-between;gap:.7rem;font-size:.86rem;color:var(--marron-suave);padding:.35rem 0}
+  .fila-ejemplo b{color:var(--marron)}
+  .resumen{background:var(--crema-2);border-radius:12px;padding:.8rem .9rem;margin:.4rem 0 .9rem}
+  .nota-wa{font-size:.76rem;color:#8E7A65;text-align:center;margin:.6rem 0 0;line-height:1.45}
+
+  .wa-float{position:fixed;right:16px;bottom:16px;z-index:70;width:56px;height:56px;border-radius:50%;background:#25A45B;color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px rgba(37,164,91,.42);text-decoration:none}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:var(--marron);color:var(--crema);padding:.7rem 1.1rem;border-radius:999px;font-size:.86rem;z-index:120;opacity:0;pointer-events:none;transition:.25s;box-shadow:var(--sombra);max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  footer{background:var(--marron);color:var(--crema-2);padding:2.2rem 0 1.2rem;margin-top:1.5rem}
+  footer a{color:var(--crema-2);text-decoration:none;font-size:.9rem}
+  footer a:hover{color:#fff;text-decoration:underline}
+  .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:1.6rem}
+  footer h4{color:#fff;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem}
+  footer ul{list-style:none;padding:0;margin:0;display:grid;gap:.4rem;font-size:.9rem}
+  .foot-bot{border-top:1px solid rgba(255,255,255,.15);margin-top:1.6rem;padding-top:.9rem;font-size:.78rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;opacity:.8}
+  @media (max-width:760px){.foot-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">Entregas en el <strong>Parque Central de Jiquilisco</strong> · Dudas por WhatsApp al <strong>7947 0124</strong></div>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html">
+      <span class="logo-mark" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAF3EA" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4Z"/>
+          <circle cx="7.5" cy="7.5" r="1.3"/>
+        </svg>
+      </span>
+      <span class="logo-txt"><b>ReVuelta</b><small>Jiquilisco · SV</small></span>
+    </a>
+    <a class="btn btn-ghost btn-sm" href="index.html">← Volver al catálogo</a>
+    <a class="btn btn-wa btn-sm" id="waHeader" href="#">WhatsApp 7947 0124</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Programa de vendedores</span>
+    <h1>Vendé con <em>ReVuelta</em></h1>
+    <p class="lead">
+      Publicamos tu artículo, lo mostramos a los compradores y lo entregamos en el Parque Central.
+      Antes de publicar necesitás <b>cumplir los requisitos</b> y <b>aceptar los costos</b>.
+      Lees todo acá abajo y al final enviás tu solicitud por WhatsApp.
+    </p>
+    <div class="hero-badges">
+      <span>✓ Publicación desde $0.25</span>
+      <span>✓ Comisión 20% solo si se vende</span>
+      <span>✓ Entrega en el Parque Central</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ REQUISITOS ============ -->
+<section id="requisitos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Paso 1 · Requisitos</span>
+      <h2>Para vender tenés que cumplir esto</h2>
+      <p>Son reglas simples: protegen a los compradores y también a vos. Si una no se cumple, el artículo no se publica.</p>
+    </div>
+
+    <div class="req-grid">
+      <div class="req">
+        <span class="ico">1</span>
+        <div>
+          <h3>Comunicarte con nosotros primero</h3>
+          <p>Nada se publica solo. Nos escribís por WhatsApp, revisamos tu artículo y te confirmamos si entra al catálogo.</p>
+        </div>
+      </div>
+      <div class="req">
+        <span class="ico">2</span>
+        <div>
+          <h3>Aceptar el precio y la comisión</h3>
+          <p>La comisión es el <b>20% del precio de venta, con un mínimo de $1.50</b>. El precio lo proponés vos, pero debe ser realista y aceptable para el catálogo.</p>
+        </div>
+      </div>
+      <div class="req">
+        <span class="ico">3</span>
+        <div>
+          <h3>Aceptar el costo de publicación</h3>
+          <p>Publicar tiene un costo desde <b>$0.25 por artículo</b> y se paga al momento de subirlo, se venda o no. La comisión se cobra aparte, solo si se vende.</p>
+        </div>
+      </div>
+      <div class="req">
+        <span class="ico">4</span>
+        <div>
+          <h3>Información 100% real</h3>
+          <p>Estado verdadero, medidas reales y fotos del artículo que tenés en mano. <b>No se acepta</b> decir “nuevo” y entregar algo usado, ni ocultar marcas o fallas.</p>
+        </div>
+      </div>
+      <div class="req">
+        <span class="ico">5</span>
+        <div>
+          <h3>Material de publicación completo</h3>
+          <p>Fotos, flyer, información y precio. Si el material está incompleto, <b>no se sube</b>: no publicamos fichas a medias.</p>
+        </div>
+      </div>
+      <div class="req prohibido">
+        <span class="ico">✕</span>
+        <div>
+          <h3>Aquí no se vende todo</h3>
+          <p>Se rechaza cualquier artículo <b>obsceno, sexual, ilegal, falsificado, robado o peligroso</b> (armas, medicamentos, animales, documentos). ReVuelta puede rechazar un artículo sin explicar el motivo.</p>
+        </div>
+      </div>
+    </div>
+    <p class="nota">Al enviar tu solicitud confirmás que aceptás estos seis puntos. Si un artículo se publica con información falsa, se retira del catálogo y no se devuelve el costo de publicación.</p>
+  </div>
+</section>
+
+<!-- ============ COSTOS ============ -->
+<section class="alt" id="costos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Paso 2 · Costos</span>
+      <h2>Cuánto cuesta vender acá</h2>
+      <p>Dos cobros distintos y fáciles de entender: uno para <b>publicar</b> y otro solo cuando <b>se vende</b>.</p>
+    </div>
+
+    <div class="costos-grid">
+      <div>
+        <table class="tabla">
+          <thead>
+            <tr><th>Concepto</th><th>Precio</th></tr>
+          </thead>
+          <tbody>
+            <tr class="destacado"><td><b>Publicar 1 artículo</b><br><span style="font-size:.78rem;color:#8E7A65">30 días en el catálogo + ficha con tus fotos</span></td><td>$0.25</td></tr>
+            <tr><td><b>Pack 3 artículos</b><br><span style="font-size:.78rem;color:#8E7A65">ahorrás $0.15</span></td><td>$0.60</td></tr>
+            <tr><td><b>Pack 5 artículos</b><br><span style="font-size:.78rem;color:#8E7A65">ahorrás $0.35</span></td><td>$0.90</td></tr>
+            <tr><td><b>Renovar 30 días más</b><br><span style="font-size:.78rem;color:#8E7A65">si no se vendió y querés seguir</span></td><td>$0.15</td></tr>
+            <tr class="destacado"><td><b>Comisión al vender</b><br><span style="font-size:.78rem;color:#8E7A65">20% del precio, mínimo $1.50</span></td><td>20%</td></tr>
+          </tbody>
+        </table>
+        <p class="nota">
+          <b>Por qué estos precios:</b> los artículos del catálogo van de $3 a $15, así que un cobro de
+          publicación alto espantaría a los vendedores. $0.25 cubre el tiempo de armar la ficha, revisar
+          el artículo y mantenerlo 30 días publicado. La comisión del 20% solo se cobra cuando el
+          artículo se vende, y el mínimo de $1.50 evita que las ventas muy baratas no dejen nada.
+          Se paga en efectivo en el Parque Central o por transferencia, antes de publicar.
+        </p>
+      </div>
+
+      <div class="calc">
+        <h4>Calculá tu ganancia</h4>
+        <p class="hint">Poné el precio al que querés vender y cuántos artículos vas a publicar.</p>
+        <div class="campo">
+          <label for="calcPrecio">Precio de venta (USD)</label>
+          <div class="calc-fila">
+            <span class="moneda">$</span>
+            <input id="calcPrecio" type="number" min="0" step="0.25" value="5" inputmode="decimal">
+          </div>
+        </div>
+        <div class="campo" style="margin-bottom:.2rem">
+          <label for="calcCantidad">Artículos a publicar</label>
+          <select id="calcCantidad">
+            <option value="1" selected>1 artículo — $0.25</option>
+            <option value="3">Pack 3 — $0.60</option>
+            <option value="5">Pack 5 — $0.90</option>
+          </select>
+        </div>
+        <div class="calc-res">
+          <div><span>Publicación (se paga al subir)</span><b id="calcPub">$0.25</b></div>
+          <div><span>Comisión ReVuelta (si se vende)</span><b id="calcCom">$1.50</b></div>
+          <div class="recibe"><span>Te queda al vender</span><b id="calcNeto">$3.25</b></div>
+        </div>
+        <div class="aviso-rojo" id="calcAviso">Con ese precio te queda muy poco o nada. Probá con un precio más alto (desde <b>$3</b> ya te quedan $1.25 por artículo).</div>
+        <p class="nota" style="margin-top:.8rem">El cálculo es por artículo. En un pack, el costo de publicación se reparte entre todos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MATERIAL ============ -->
+<section id="material">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Paso 3 · Material</span>
+      <h2>Qué nos tenés que enviar</h2>
+      <p>El material lo preparás vos. Si falta una sola pieza, <b>el artículo no se publica</b> hasta completarlo.</p>
+    </div>
+
+    <div class="mat-grid">
+      <div class="mat">
+        <h3><span>📷</span> Fotos</h3>
+        <p>Mínimo <b>2 fotos reales</b> con buena luz: una del artículo completo y una del detalle o de la marca de uso. Nada de fotos bajadas de internet.</p>
+      </div>
+      <div class="mat">
+        <h3><span>🖼️</span> Flyer</h3>
+        <p>Un flyer o anuncio con el artículo, su estado y el precio, para publicarlo en redes. Si no lo tenés, nos avisás y lo coordinamos antes de publicar.</p>
+      </div>
+      <div class="mat">
+        <h3><span>📝</span> Información</h3>
+        <p>Nombre del artículo, medida o talla, material, color y <b>el estado real</b> (marcas, detalles, si funciona o no).</p>
+      </div>
+      <div class="mat">
+        <h3><span>💵</span> Precio</h3>
+        <p>El precio final en dólares, ya pensando en la comisión del 20% (mínimo $1.50) y el costo de publicación.</p>
+      </div>
+    </div>
+    <p class="nota">Ejemplo de material completo: 3 fotos + flyer + “Collar de piedras, 38 cm, cadena plateada, buen estado, sin marcas” + precio $5.00.</p>
+  </div>
+</section>
+
+<!-- ============ CÓMO FUNCIONA ============ -->
+<section class="alt" id="como-funciona">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Paso 4 · El proceso</span>
+      <h2>Cómo se hace, en orden</h2>
+    </div>
+    <div class="pasos">
+      <div class="paso">
+        <div class="num">1</div>
+        <h3>Escribinos</h3>
+        <p>Llenás el formulario de abajo y se abre WhatsApp con tus datos, el resumen de costos y tu aceptación de los requisitos.</p>
+      </div>
+      <div class="paso">
+        <div class="num">2</div>
+        <h3>Revisamos y confirmamos</h3>
+        <p>Vemos el artículo, el precio y el material. Te decimos si entra, cuánto sale publicarlo y te pasamos el total a pagar.</p>
+      </div>
+      <div class="paso">
+        <div class="num">3</div>
+        <h3>Pagás la publicación</h3>
+        <p>Con el pago de la publicación (desde $0.25) subimos la ficha con su código, fotos y medidas.</p>
+      </div>
+      <div class="paso">
+        <div class="num">4</div>
+        <h3>Cobrás cuando se vende</h3>
+        <p>Entregamos en el Parque Central, cobramos al comprador y te pagamos tu precio menos la comisión del 20% ese mismo día.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORMULARIO ============ -->
+<section id="solicitud">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Paso 5 · Solicitud</span>
+      <h2>Enviá tu solicitud</h2>
+      <p>Marcá las casillas de aceptación, completá los datos y se abre WhatsApp con todo escrito.</p>
+    </div>
+
+    <form class="form-card" id="formVender" novalidate>
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="cReq"><span>Leí y acepto los <b>requisitos</b>, el <b>costo de publicación (desde $0.25)</b> y la <b>comisión del 20% con mínimo de $1.50</b>.</span></label>
+        <label class="check"><input type="checkbox" id="cLegal"><span>Mi artículo <b>no es obsceno, ilegal, falsificado, robado ni peligroso</b> y tengo derecho a venderlo.</span></label>
+        <label class="check"><input type="checkbox" id="cHonesto"><span>La información y el estado que voy a dar son <b>reales</b>. Entiendo que si digo “nuevo” y entrego algo usado, el artículo se retira.</span></label>
+        <label class="check"><input type="checkbox" id="cMaterial"><span>Voy a enviar el <b>material completo</b>: fotos, flyer, información y precio. Entiendo que si está incompleto <b>no se publica</b>.</span></label>
+      </div>
+
+      <div class="dos">
+        <div class="campo">
+          <label for="vNombre">Tu nombre *</label>
+          <input id="vNombre" placeholder="Ej. María López" autocomplete="name">
+        </div>
+        <div class="campo">
+          <label for="vTelefono">Tu WhatsApp *</label>
+          <input id="vTelefono" type="tel" inputmode="tel" placeholder="Ej. 7947 0124">
+        </div>
+      </div>
+      <div class="campo">
+        <label for="vArticulo">¿Qué querés vender? *</label>
+        <input id="vArticulo" placeholder="Ej. Audífonos inalámbricos">
+      </div>
+      <div class="dos">
+        <div class="campo">
+          <label for="vCategoria">Categoría</label>
+          <select id="vCategoria">
+            <option>Collares</option>
+            <option>Calzado</option>
+            <option>Juguetes</option>
+            <option>Peluches</option>
+            <option>Ropa</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="vPrecio">Precio que querés (USD) *</label>
+          <input id="vPrecio" type="number" min="0" step="0.25" inputmode="decimal" placeholder="5.00">
+        </div>
+      </div>
+      <div class="dos">
+        <div class="campo">
+          <label for="vCantidad">Cuántos artículos</label>
+          <select id="vCantidad">
+            <option value="1" selected>1 artículo</option>
+            <option value="3">3 artículos (pack)</option>
+            <option value="5">5 artículos (pack)</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="vEstado">Estado real</label>
+          <select id="vEstado">
+            <option>Como nuevo (usado, sin marcas)</option>
+            <option selected>Buen estado (marcas mínimas)</option>
+            <option>Con detalles de uso visibles</option>
+          </select>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="vMaterial">¿Qué material ya tenés?</label>
+        <select id="vMaterial">
+          <option selected>Fotos + flyer + información + precio</option>
+          <option>Solo fotos y precio (me falta flyer)</option>
+          <option>Solo tengo el artículo, nada más</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="vDetalle">Detalles (marca, medidas, marcas de uso…)</label>
+        <textarea id="vDetalle" rows="2" placeholder="Ej. 38 cm, cadena plateada, sin marcas"></textarea>
+      </div>
+
+      <div class="resumen" id="vResumen"></div>
+
+      <button class="btn btn-primary" type="submit" id="vEnviar" style="width:100%" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.6-.8-2.7-1.9-3.5-3.4-.2-.4 0-.5.2-.7.2-.2.5-.6.6-.8.1-.2.1-.4 0-.6-.1-.2-.7-1.7-.9-2.3-.2-.5-.4-.5-.6-.5h-.6c-.2 0-.6.1-.9.4-.9.9-1.1 2-.8 3.2.4 1.5 1.4 2.9 2.5 4 1.6 1.6 3.4 2.6 5.6 2.9 1 .1 2-.2 2.6-1.1.2-.3.3-.7.3-1.1 0-.2 0-.3-.2-.4Z"/><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+        Enviar solicitud por WhatsApp
+      </button>
+      <p class="nota-wa" id="vNota">El botón se activa cuando aceptás los cuatro puntos. Después te pedimos las fotos y el flyer por el mismo chat.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="margin-bottom:.7rem">
+          <span class="logo-mark" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAF3EA" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4Z"/>
+              <circle cx="7.5" cy="7.5" r="1.3"/>
+            </svg>
+          </span>
+          <span class="logo-txt" style="color:#FAF3EA"><b>ReVuelta</b><small style="color:#D9C3AC">Jiquilisco · SV</small></span>
+        </div>
+        <p style="font-size:.88rem;max-width:34ch;opacity:.85">Compra y venta de artículos de segunda mano. Entregas en el Parque Central de Jiquilisco, Usulután.</p>
+      </div>
+      <div>
+        <h4>Esta página</h4>
+        <ul>
+          <li><a href="#requisitos">Requisitos</a></li>
+          <li><a href="#costos">Costos y comisión</a></li>
+          <li><a href="#material">Material necesario</a></li>
+          <li><a href="#solicitud">Enviar solicitud</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="#" id="waFooter">WhatsApp: 7947 0124</a></li>
+          <li><a href="index.html">Ver catálogo</a></li>
+          <li>Parque Central de Jiquilisco</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© <span id="year"></span> ReVuelta. Todos los derechos reservados.</span>
+      <span>Hecho en Jiquilisco 🇸🇻</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="#" aria-label="Escribir por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.6-.8-2.7-1.9-3.5-3.4-.2-.4 0-.5.2-.7.2-.2.5-.6.6-.8.1-.2.1-.4 0-.6-.1-.2-.7-1.7-.9-2.3-.2-.5-.4-.5-.6-.5h-.6c-.2 0-.6.1-.9.4-.9.9-1.1 2-.8 3.2.4 1.5 1.4 2.9 2.5 4 1.6 1.6 3.4 2.6 5.6 2.9 1 .1 2-.2 2.6-1.1.2-.3.3-.7.3-1.1 0-.2 0-.3-.2-.4Z"/><path d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.4A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+</a>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================================
+   CONFIGURACIÓN  ← cambiá acá los precios y la comisión
+   ========================================================================= */
+const CONFIG = {
+  whatsapp: "50379470124",   // 503 + 7947 0124
+  comisionPct: 0.20,         // 20% del precio de venta
+  comisionMin: 1.50,         // mínimo por artículo vendido
+  publicacion: { 1: 0.25, 3: 0.60, 5: 0.90 },  // costo por publicar según cantidad
+  renovacion: 0.15
+};
+
+const $ = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+const dinero = n => "$" + (Math.round(n * 100) / 100).toFixed(2);
+
+function waLink(mensaje) {
+  const num = String(CONFIG.whatsapp).replace(/\D/g, "");
+  return "https://wa.me/" + num + "?text=" + encodeURIComponent(mensaje);
+}
+function abrirWA(msg) {
+  if (String(CONFIG.whatsapp).replace(/\D/g, "").length < 8) {
+    console.log(msg);
+    toast("WhatsApp por confirmar — tu solicitud quedó lista");
+    return;
+  }
+  window.open(waLink(msg), "_blank", "noopener");
+}
+let toastTimer;
+function toast(txt) {
+  const t = $("#toast");
+  t.textContent = txt;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+/* ---------- cálculo de costos ---------- */
+function calcular(precio, cantidad) {
+  const p = Number(precio) || 0;
+  const cant = Number(cantidad) || 1;
+  const comisionPorArt = Math.max(Math.round(p * CONFIG.comisionPct * 100) / 100, CONFIG.comisionMin);
+  const comision = comisionPorArt;                    // por artículo
+  const publicacion = CONFIG.publicacion[cant] ?? CONFIG.publicacion[1];
+  const pubPorArt = Math.round((publicacion / cant) * 100) / 100;
+  const neto = Math.round((p - comision - pubPorArt) * 100) / 100;
+  return { precio: p, cant, comision, publicacion, pubPorArt, neto, aplicaMinimo: p * CONFIG.comisionPct < CONFIG.comisionMin };
+}
+
+/* ---------- calculadora de la sección de costos ---------- */
+function pintarCalc() {
+  const precio = $("#calcPrecio").value;
+  const cant = $("#calcCantidad").value;
+  const r = calcular(precio, cant);
+  $("#calcPub").textContent = dinero(r.publicacion);
+  $("#calcCom").textContent = dinero(r.comision);
+  $("#calcNeto").textContent = dinero(Math.max(0, r.neto));
+  $("#calcAviso").classList.toggle("show", r.precio > 0 && r.neto < 1);
+}
+$("#calcPrecio")?.addEventListener("input", pintarCalc);
+$("#calcCantidad")?.addEventListener("change", pintarCalc);
+pintarCalc();
+
+/* ---------- resumen del formulario ---------- */
+function pintarResumen() {
+  const precio = $("#vPrecio").value;
+  const cant = $("#vCantidad").value;
+  const r = calcular(precio, cant);
+  const resumen = $("#vResumen");
+  if (!precio) {
+    resumen.innerHTML = '<div class="fila-ejemplo"><span>Escribí el precio para ver el resumen de costos.</span></div>';
+    return;
+  }
+  resumen.innerHTML = `
+    <div class="fila-ejemplo"><span>Artículos</span><b>${r.cant}</b></div>
+    <div class="fila-ejemplo"><span>Publicación (pagás al subir)</span><b>${dinero(r.publicacion)}</b></div>
+    <div class="fila-ejemplo"><span>Comisión por venta (20%, mín. $1.50)</span><b>${dinero(r.comision)} c/u</b></div>
+    <div class="fila-ejemplo" style="border-top:1px solid var(--linea);margin-top:.3rem;padding-top:.5rem">
+      <span><b>Te queda por artículo vendido</b></span><b style="color:var(--oliva)">${dinero(Math.max(0, r.neto))}</b>
+    </div>
+    ${r.aplicaMinimo ? '<div class="fila-ejemplo" style="font-size:.78rem;color:#8E7A65"><span>Se aplica la comisión mínima de $1.50.</span></div>' : ""}`;
+}
+["#vPrecio", "#vCantidad"].forEach(sel => {
+  $(sel)?.addEventListener("input", pintarResumen);
+  $(sel)?.addEventListener("change", pintarResumen);
+});
+pintarResumen();
+
+/* ---------- aceptación obligatoria ---------- */
+const CHECKS = ["#cReq", "#cLegal", "#cHonesto", "#cMaterial"];
+function revisarAceptacion() {
+  const todos = CHECKS.every(sel => $(sel).checked);
+  $("#vEnviar").disabled = !todos;
+  $$(".check").forEach(label => {
+    const input = label.querySelector("input");
+    label.classList.toggle("ok", input.checked);
+  });
+  $("#vNota").textContent = todos
+    ? "Ya podés enviar. Se abre WhatsApp con tu aceptación, tus datos y el resumen de costos."
+    : "El botón se activa cuando aceptás los cuatro puntos.";
+  return todos;
+}
+CHECKS.forEach(sel => $(sel).addEventListener("change", revisarAceptacion));
+revisarAceptacion();
+
+/* ---------- envío ---------- */
+$("#formVender").addEventListener("submit", e => {
+  e.preventDefault();
+  if (!revisarAceptacion()) { toast("Tenés que aceptar los cuatro puntos"); return; }
+
+  const nombre = $("#vNombre").value.trim();
+  const tel = $("#vTelefono").value.trim();
+  const articulo = $("#vArticulo").value.trim();
+  const precio = Number($("#vPrecio").value) || 0;
+
+  if (!nombre) { toast("Escribí tu nombre"); $("#vNombre").focus(); return; }
+  if (!tel) { toast("Escribí tu WhatsApp"); $("#vTelefono").focus(); return; }
+  if (!articulo) { toast("Escribí qué querés vender"); $("#vArticulo").focus(); return; }
+  if (!precio) { toast("Poné el precio que querés"); $("#vPrecio").focus(); return; }
+
+  const r = calcular(precio, $("#vCantidad").value);
+  if (r.neto <= 0) {
+    toast("Con " + dinero(precio) + " no te queda ganancia: subí el precio");
+    $("#vPrecio").focus();
+    return;
+  }
+
+  const cat = $("#vCategoria").value;
+  const estado = $("#vEstado").value;
+  const material = $("#vMaterial").value;
+  const detalle = $("#vDetalle").value.trim();
+
+  let msg = "¡Hola ReVuelta! Quiero vender en el catálogo.\n\n";
+  msg += "ACEPTO LOS REQUISITOS:\n";
+  msg += "✔ Comisión 20% (mínimo $1.50) y costo de publicación\n";
+  msg += "✔ Mi artículo no es obsceno, ilegal, falsificado, robado ni peligroso\n";
+  msg += "✔ La información y el estado que doy son reales\n";
+  msg += "✔ Enviaré el material completo (fotos, flyer, información y precio)\n\n";
+  msg += "DATOS:\n";
+  msg += `• Nombre: ${nombre}\n`;
+  msg += `• WhatsApp: ${tel}\n`;
+  msg += `• Artículo: ${articulo}\n`;
+  msg += `• Categoría: ${cat}\n`;
+  msg += `• Estado real: ${estado}\n`;
+  msg += `• Cantidad a publicar: ${r.cant}\n`;
+  msg += `• Precio que quiero: ${dinero(precio)}\n`;
+  if (detalle) msg += `• Detalles: ${detalle}\n`;
+  msg += `• Material que tengo: ${material}\n\n`;
+  msg += "COSTOS (calculado por el sitio):\n";
+  msg += `• Publicación: ${dinero(r.publicacion)}\n`;
+  msg += `• Comisión al vender: ${dinero(r.comision)} por artículo\n`;
+  msg += `• Me quedaría: ${dinero(Math.max(0, r.neto))} por artículo\n`;
+  msg += "\nEntrega: Parque Central de Jiquilisco.\n\n¿Me confirmás el total a pagar y cómo mando las fotos?";
+
+  abrirWA(msg);
+});
+
+/* ---------- whatsapp general ---------- */
+const msgGeneral = "¡Hola ReVuelta! Tengo dudas sobre cómo vender mis artículos en el catálogo.";
+["#waFloat", "#waFooter", "#waHeader"].forEach(sel => {
+  const el = $(sel);
+  if (el) el.addEventListener("click", e => { e.preventDefault(); abrirWA(msgGeneral); });
+});
+
+$("#year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
