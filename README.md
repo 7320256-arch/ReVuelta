@@ -393,3 +393,50 @@ Ahora son **2 archivos nuevos/modificados**: `index.html` (ya no tiene la secci�
 
 > El service worker v3 guarda `vender.html` en caché: la página de vendedores también abre
 > sin internet.
+
+---
+
+## 13. Inventario: 1 pieza por artículo y estados de venta
+
+Todos los artículos del catálogo son **pieza única**: `"stock": 1`. Cada producto tiene además un
+campo nuevo, `"estadoVenta"`, con tres valores posibles:
+
+| Valor | Qué se ve en el catálogo | Se puede comprar |
+|---|---|---|
+| `"disponible"` | Etiqueta **“Última pieza”** | Sí |
+| `"apartado"` | Cinta verde **APARTADO** + precio normal | No (botón “Preguntar”) |
+| `"vendido"` | Cinta roja **VENDIDO** + foto en gris + precio tachado | No (botón “Buscar uno similar”) |
+
+**Marcados como vendidos ahora:** RV-004 (collar abalorios morados) y RV-005 (collar artesanal).
+
+### Cómo cambiar el estado de un artículo
+
+Edita `productos.json` y cambia la línea:
+
+```json
+"stock": 1,
+"estadoVenta": "disponible"     ← "disponible" | "apartado" | "vendido"
+```
+
+Luego `python3 build.py --pwa` (o edita directo el `index.html` publicado).
+
+### Mi recomendación sobre “vendido” vs “apartado”
+
+Como la entrega es el **jueves** y todavía no los has entregado:
+
+- **Si ya te pagaron o te confirmaron firme** → `"vendido"`.
+- **Si solo está reservado y podría caerse** → `"apartado"` (se ve la cinta verde y el botón no
+  deja comprar, pero no queda como venta cerrada).
+
+Dejé los dos collares en `"vendido"` como pediste. Si el jueves alguno se cae, cambias una
+palabra y vuelve a estar disponible.
+
+### Otras cosas que se agregaron con esto
+
+- **Filtro “Solo disponibles”** en la fila de Estado, con el conteo (hoy: 11).
+- Los artículos vendidos **no se pueden agregar** al pedido, y si estaban en el carrito guardado
+  de un cliente, se quitan automáticamente al abrir la página.
+- La foto de cualquier tarjeta abre la ficha, también la de los vendidos, para que se vea el
+  detalle y quede el botón “Buscar uno similar”.
+- Nota en el catálogo: “Cada uno es pieza única: hay 1 disponible”.
+- Pregunta nueva en el FAQ explicando por qué aparece algo vendido.
