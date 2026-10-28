@@ -440,3 +440,38 @@ palabra y vuelve a estar disponible.
   detalle y quede el botón “Buscar uno similar”.
 - Nota en el catálogo: “Cada uno es pieza única: hay 1 disponible”.
 - Pregunta nueva en el FAQ explicando por qué aparece algo vendido.
+
+---
+
+## 14. Producto nuevo: Tablet Samsung Galaxy Tab A (RV-014) · $25.00
+
+Es el primer artículo de la categoría **Electrónica** (el chip aparece solo).
+
+**Se resumió la publicación original sin perder nada importante.** En el sitio quedó:
+
+- **Resumen corto** (lo que se ve en la tarjeta): modelo, RAM, almacenamiento y para qué sirve.
+- **Descripción**: hardware bien / software viejo, con lo que sí puede hacer (leer PDFs, música,
+  videos descargados, repuesto).
+- **10 especificaciones**: modelo SM-T280, 1.5 GB RAM, 8 GB + Micro SD hasta 200 GB,
+  Android 5.1.1, pantalla intacta, batería, carga Micro-USB, táctil/botones, altavoz y el
+  detalle de la tapita de goma faltante.
+- **Bloque nuevo “Importante antes de comprar”** (campo `advertencias` en `productos.json`):
+  Android viejo, Gmail/Instagram/Facebook incompatibles, YouTube lento, no multitarea y que
+  **no incluye cargador**.
+- En la tarjeta se muestra un chip **“⚠ Ojo: lee los detalles”** cuando el producto tiene
+  advertencias, para que nadie compre sin leer.
+
+### Cómo usar `advertencias` en otros productos
+
+```json
+"notas": "Texto libre.",
+"advertencias": [
+  "Detalle negativo 1",
+  "Detalle negativo 2"
+]
+```
+
+Si el campo está vacío o no existe, el bloque no aparece.
+
+**También se agregaron 6 fotos** (frontal, pantalla con Play Store, trasera, dos laterales y la
+pantalla de ajustes con la versión de Android) como galería del producto.
