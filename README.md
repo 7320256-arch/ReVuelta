@@ -475,3 +475,54 @@ Si el campo está vacío o no existe, el bloque no aparece.
 
 **También se agregaron 6 fotos** (frontal, pantalla con Play Store, trasera, dos laterales y la
 pantalla de ajustes con la versión de Android) como galería del producto.
+
+---
+
+## 15. Lociones Cyzone Nitro (RV-015) · una sola ficha, $15 cada una
+
+Las dos colonias van **juntas en un solo producto**, no en dos publicaciones.
+
+- **Nombre:** Lociones Cyzone Nitro para hombre
+- **Precio:** $15.00 cada una
+- **Stock:** 2 (1 Nitro + 1 Nitro Night)
+- **Estado:** Nuevo
+- **Categoría:** Perfumes
+- **Fotos:** 2 (portada la caja negra, segunda la caja azul)
+
+### Variantes (bloque nuevo en la ficha)
+La ficha muestra dos recuadros con las especificaciones de cada loción:
+
+| | **Nitro** (caja negra) | **Nitro Night** (caja azul) |
+|---|---|---|
+| Salida | Hojas verdes y cítricos | Jengibre fresco |
+| Corazón | Acordes herbales frescos | Vetiver con matiz licoroso |
+| Fondo | Pachulí y cedro | Ámbar cálido |
+| Duración | ~8 horas | Alta concentración, larga duración |
+| Uso | Día | Noche |
+
+Datos generales: marca Cyzone (Colombia), eau de toilette masculina, 100 ml cada una,
+familia herbal aromática, tecnología Essent Tech, vegana y libre de crueldad animal,
+nuevas y selladas.
+
+### Cómo se hizo (para futuras fichas)
+El bloque de variantes se activa con el campo **`variantes`** en `productos.json`:
+
+```json
+"variantes": [
+  { "nombre": "Nitro (caja negra)", "sub": "Herbal fresco · para el día",
+    "specs": [["Salida", "Hojas verdes y cítricos"]] }
+]
+```
+Si un producto no tiene `variantes`, la ficha se ve igual que siempre. Sirve para cualquier
+producto con modelos o colores distintos: una sola publicación, varios recuadros.
+
+### Flyer enlazado
+El flyer de las lociones vive en el repo como **`flyer-perfumes-nitro.png`** (1080 × 1350,
+formato feed de Instagram) y la ficha RV-015 lo abre con el botón **“📸 Ver flyer para redes”**.
+
+- El enlace se activa con el campo **`"flyer": "flyers/flyer-perfumes-nitro.png"`** en `productos.json`.
+- `build.py --pwa` copia el archivo a `pwa/` con su nombre plano, para que el enlace
+  `./flyer-perfumes-nitro.png` funcione en GitHub Pages.
+- `sw.js` (v8) lo precarga, así que también se abre sin internet.
+- Si querés flyer de otro producto, se genera un PNG nuevo, se agrega el campo `flyer`
+  a ese producto y se vuelve a compilar.

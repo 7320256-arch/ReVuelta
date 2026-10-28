@@ -6,7 +6,7 @@
    - Íconos y fotos: cache-first (casi nunca cambian).
 */
 
-const VERSION = "revuelta-v5";
+const VERSION = "revuelta-v8";
 const SHELL = [
   "./",
   "./index.html",
@@ -15,7 +15,8 @@ const SHELL = [
   "./icon-192.png",
   "./icon-512.png",
   "./icon-maskable-512.png",
-  "./apple-touch-icon.png"
+  "./apple-touch-icon.png",
+  "./flyer-perfumes-nitro.png"
 ];
 
 self.addEventListener("install", (evento) => {
