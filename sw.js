@@ -1,79 +1,76 @@
-/* sw.js — service worker de ReVuelta
-   Estrategia:
-   - Al instalar: precarga el shell (HTML, manifest, íconos).
-   - Navegación (index.html): network-first con respaldo en caché → siempre
-     intenta traer la versión más nueva, y si no hay internet abre la copia guardada.
-   - Íconos y fotos: cache-first (casi nunca cambian).
-*/
-
-const VERSION = "revuelta-v8";
-const SHELL = [
-  "./",
-  "./index.html",
-  "./vender.html",
-  "./manifest.webmanifest",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./icon-maskable-512.png",
-  "./apple-touch-icon.png",
-  "./flyer-perfumes-nitro.png"
+/* Permite usar el sitio sin internet después de abrirlo una vez.
+   Con internet siempre muestra la versión más reciente; sin internet usa la copia guardada.
+   Si agregas archivos nuevos, súbele el número a VERSION. */
+const VERSION = "reddfut-v6";
+const ARCHIVOS = [
+  "./", "index.html", "estilos.css", "app.js", "datos.js", "manifest.webmanifest",
+  "logo.png", "favicon.png", "icono-192.png", "icono-512.png", "apple-touch-icon.png",
+  "letra-600.woff2", "letra-800.woff2", "firebase-config.js", "quiniela.js", "avisos.js"
 ];
 
-self.addEventListener("install", (evento) => {
-  evento.waitUntil(
-    caches.open(VERSION)
-      .then((cache) => cache.addAll(SHELL))
-      .catch(() => null)          // si algo falla no rompemos la instalación
-      .then(() => self.skipWaiting())
-  );
+self.addEventListener("install", (e) => {
+  // cache:"reload" = bajar siempre la versión nueva, nunca la copia vieja del navegador
+  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(ARCHIVOS.map((u) => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting()));
 });
 
-self.addEventListener("activate", (evento) => {
-  evento.waitUntil(
+self.addEventListener("activate", (e) => {
+  e.waitUntil(
     caches.keys()
-      .then((claves) => Promise.all(
-        claves.filter((c) => c !== VERSION).map((c) => caches.delete(c))
-      ))
+      .then((ks) => Promise.all(ks.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener("fetch", (evento) => {
-  const req = evento.request;
-
-  // solo GET del mismo origen
-  if (req.method !== "GET") return;
-  const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return;
-
-  // navegación / HTML / manifest → network-first
-  // (el manifest NUNCA debe servirse viejo: Chrome lo usa para identificar la app)
-  const esDocumento = req.mode === "navigate" ||
-    (req.headers.get("accept") || "").includes("text/html") ||
-    url.pathname.endsWith("manifest.webmanifest");
-
-  if (esDocumento) {
-    evento.respondWith(
-      fetch(req)
-        .then((resp) => {
+self.addEventListener("fetch", (e) => {
+  const req = e.request;
+  if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
+  // Con internet: preguntar siempre a GitHub si hay algo nuevo (no-cache).
+  // Sin internet: usar la copia guardada.
+  e.respondWith(
+    fetch(req, { cache: "no-cache" })
+      .then((resp) => {
+        if (resp && resp.ok) {
           const copia = resp.clone();
           caches.open(VERSION).then((c) => c.put(req, copia));
-          return resp;
-        })
-        .catch(() => caches.match(req).then((r) => r || caches.match("./index.html")))
-    );
-    return;
-  }
-
-  // el resto → cache-first con relleno
-  evento.respondWith(
-    caches.match(req).then((enCache) => {
-      if (enCache) return enCache;
-      return fetch(req).then((resp) => {
-        const copia = resp.clone();
-        caches.open(VERSION).then((c) => c.put(req, copia));
+        }
         return resp;
-      }).catch(() => enCache);
+      })
+      .catch(() =>
+        caches.match(req, { ignoreSearch: true })
+          .then((r) => r || (req.mode === "navigate" ? caches.match("index.html") : undefined))
+      )
+  );
+});
+
+/* ---------- Avisos (notificaciones) ----------
+   Llegan desde Firebase Cloud Messaging cuando GitHub publica resultados nuevos. */
+function mostrarAviso(datos) {
+  const x = Object.assign({}, (datos && datos.notification) || {}, (datos && datos.data) || {});
+  const titulo = x.titulo || x.title || "Torneo REDDFUT";
+  return self.registration.showNotification(titulo, {
+    body: x.cuerpo || x.body || "Hay novedades en el torneo.",
+    icon: "icono-192.png",
+    tag: x.tag || "reddfut",
+    renotify: true,
+    data: { url: x.url || "./" }
+  });
+}
+
+self.addEventListener("push", (e) => {
+  let datos = {};
+  try { datos = e.data ? e.data.json() : {}; }
+  catch (err) { datos = { data: { cuerpo: e.data ? e.data.text() : "" } }; }
+  e.waitUntil(mostrarAviso(datos));
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || "./", self.registration.scope).href;
+  e.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((ventanas) => {
+      const abierta = ventanas.find((v) => v.url.startsWith(self.registration.scope));
+      if (abierta) return abierta.navigate(url).then((v) => (v || abierta).focus()).catch(() => abierta.focus());
+      return self.clients.openWindow(url);
     })
   );
 });
